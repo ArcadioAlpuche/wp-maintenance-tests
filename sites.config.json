@@ -1,0 +1,26 @@
+[
+  {
+    "siteName": "Example Site",
+    "baseUrl": "https://ideal-guacamole-pp776pjp9r9h7xr6-80.app.github.dev/",
+    "pages": [
+      "/",
+      "/blog/",
+      "/about-firsttracks-marketing-team/",
+      "/website-development-services/"
+    ],
+    "formPages": [
+      {
+        "path": "/contact/",
+        "expectedFormType": "gravity-forms",
+        "submitTest": false
+      }
+    ],
+    "ignoreNetworkPatterns": [
+      "googletagmanager.com",
+      "google-analytics.com",
+      "klaviyo.com",
+      "facebook.net"
+    ],
+    "expectedText": []
+  }
+]

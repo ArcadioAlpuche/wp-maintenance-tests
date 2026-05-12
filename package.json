@@ -1,0 +1,18 @@
+{
+  "name": "wp-maintenance-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Config-driven Playwright smoke tests for WordPress maintenance checks.",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.ts",
+    "test:forms": "playwright test tests/forms.spec.ts",
+    "test:assets": "playwright test tests/assets.spec.ts",
+    "test:site": "node utils/run-playwright.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@types/node": "^25.7.0",
+    "typescript": "^5.5.0"
+  }
+}
