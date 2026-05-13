@@ -247,22 +247,3 @@ This project intentionally prioritizes:
 This is not intended to be a full end-to-end testing framework.
 
 The focus is practical maintenance QA for real-world WordPress agency workflows.
-
----
-
-# Future Ideas
-
-* WP Admin smoke tests
-* Authenticated testing
-* Visual regression diffs
-* GitHub Actions integration
-* Lighthouse/performance checks
-* Accessibility testing
-* Slack/Discord reporting
-* Automatic sitemap crawling
-
----
-
-# License
-
-MIT
