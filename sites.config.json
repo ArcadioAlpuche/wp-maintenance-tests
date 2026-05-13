@@ -1,17 +1,22 @@
 [
   {
     "siteName": "Example Site",
-    "baseUrl": "https://ideal-guacamole-pp776pjp9r9h7xr6-80.app.github.dev/",
+    "baseUrl": "https://automatic-halibut-rp77xp4px9pf44-80.app.github.dev/",
     "pages": [
       "/",
-      "/blog/",
-      "/about-firsttracks-marketing-team/",
-      "/website-development-services/"
+      "/category/getting-started/",
+      "/category/quiz/",
+      "/category/videos/",
+      "/about-us/"
     ],
     "formPages": [
       {
-        "path": "/contact/",
-        "expectedFormType": "gravity-forms",
+        "path": "/",
+        "expectedFormType": "generic-form",
+        "scopeSelector": "body",
+        "formSelector": "form",
+        "fieldSelector": "input[type=\"email\"], input[name*=\"email\" i], input[placeholder*=\"email\" i]",
+        "submitSelector": "button[type=\"submit\"], input[type=\"submit\"], button:has-text(\"Subscribe\"), input[value*=\"Subscribe\" i]",
         "submitTest": false
       }
     ],

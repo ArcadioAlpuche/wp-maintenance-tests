@@ -1,11 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-export type ExpectedFormType = 'gravity-forms' | 'ninja-forms' | 'klaviyo';
+export type ExpectedFormType = 'gravity-forms' | 'ninja-forms' | 'contact-form-7' | 'generic-form' | 'klaviyo';
 
 export type FormPageConfig = {
   path: string;
   expectedFormType: ExpectedFormType;
+  formSelector?: string;
+  scopeSelector?: string;
+  fieldSelector?: string;
+  submitSelector?: string;
   submitTest?: boolean;
   required?: boolean;
 };

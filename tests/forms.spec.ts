@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { loadSites, pageUrl } from '../utils/load-sites';
-import { detectForms, hasRawFormShortcode } from '../utils/form-detectors';
+import { detectForms, detectGenericForm, hasRawFormShortcode } from '../utils/form-detectors';
 import { createNetworkMonitor } from '../utils/network-monitor';
 import { capturePageScreenshot } from '../utils/screenshot-helper';
 import { writeResult } from '../utils/report-results';
@@ -35,6 +35,13 @@ for (const site of loadSites()) {
 
           await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => undefined);
           detection = await detectForms(page);
+          detection.genericForm = await detectGenericForm(
+            page,
+            formPage.scopeSelector,
+            formPage.formSelector,
+            formPage.fieldSelector,
+            formPage.submitSelector
+          );
 
           if (await hasRawFormShortcode(page)) {
             issues.push('Visible raw form shortcode found.');
@@ -61,6 +68,30 @@ for (const site of loadSites()) {
             }
             if (!detection.ninjaForms.hasField) {
               issues.push('Ninja Forms input, textarea, or select was not found.');
+            }
+          }
+
+          if (formPage.expectedFormType === 'contact-form-7') {
+            if (!detection.contactForm7.found) {
+              issues.push('Expected Contact Form 7 form was not detected.');
+            }
+            if (!detection.contactForm7.hasSubmitButton) {
+              issues.push('Contact Form 7 submit button was not found.');
+            }
+            if (!detection.contactForm7.hasField) {
+              issues.push('Contact Form 7 input, textarea, or select was not found.');
+            }
+          }
+
+          if (formPage.expectedFormType === 'generic-form') {
+            if (!detection.genericForm.found) {
+              issues.push('Expected generic form was not detected.');
+            }
+            if (!detection.genericForm.hasSubmitButton) {
+              issues.push('Generic form submit button was not found.');
+            }
+            if (!detection.genericForm.hasField) {
+              issues.push('Generic form input, textarea, or select was not found.');
             }
           }
 
