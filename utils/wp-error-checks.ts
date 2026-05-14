@@ -11,10 +11,29 @@ export const WORDPRESS_FAILURE_STRINGS = [
   '[ninja_form'
 ];
 
+export const BROKEN_SHORTCODE_PATTERNS = [
+  '[gravityform',
+  '[ninja_form',
+  '[contact-form-7',
+  '[elementor-template',
+  '[vc_row',
+  '[rev_slider'
+];
+
 export function findWordPressErrors(bodyText: string): string[] {
   const lowerBody = bodyText.toLowerCase();
 
   return WORDPRESS_FAILURE_STRINGS.filter((failureString) => lowerBody.includes(failureString.toLowerCase()));
+}
+
+export function findBrokenShortcodes(bodyText: string, ignoredShortcodes: string[] = []): string[] {
+  const lowerBody = bodyText.toLowerCase();
+  const lowerIgnored = ignoredShortcodes.map((shortcode) => shortcode.toLowerCase());
+
+  return BROKEN_SHORTCODE_PATTERNS.filter((shortcode) => {
+    const lowerShortcode = shortcode.toLowerCase();
+    return lowerBody.includes(lowerShortcode) && !lowerIgnored.some((ignored) => lowerShortcode.includes(ignored) || ignored.includes(lowerShortcode));
+  });
 }
 
 export function looksLikeGeneric404(title: string, bodyText: string, status: number | null): boolean {

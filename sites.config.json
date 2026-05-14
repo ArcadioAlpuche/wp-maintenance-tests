@@ -1,13 +1,10 @@
 [
   {
     "siteName": "Example Site",
-    "baseUrl": "https://automatic-halibut-rp77xp4px9pf44-80.app.github.dev/",
+    "baseUrl": "https://ideal-guacamole-pp776pjp9r9h7xr6-80.app.github.dev/",
     "pages": [
       "/",
-      "/category/getting-started/",
-      "/category/quiz/",
-      "/category/videos/",
-      "/about-us/"
+      "/contact/"
     ],
     "formPages": [
       {
@@ -26,6 +23,16 @@
       "klaviyo.com",
       "facebook.net"
     ],
+    "ignoreShortcodes": [],
+    "mobileNav": {
+      "enabled": true,
+      "menuSelectors": [],
+      "linkSelector": "nav a, [role=\"navigation\"] a, .menu a, .navbar a, .mobile-menu a"
+    },
+    "internalLinkSample": {
+      "maxLinks": 20,
+      "ignorePatterns": []
+    },
     "expectedText": []
   }
 ]

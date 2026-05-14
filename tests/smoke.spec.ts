@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { loadSites, pageUrl } from '../utils/load-sites';
-import { findWordPressErrors, looksLikeGeneric404 } from '../utils/wp-error-checks';
+import { findBrokenShortcodes, findWordPressErrors, looksLikeGeneric404 } from '../utils/wp-error-checks';
 import { createNetworkMonitor } from '../utils/network-monitor';
 import { capturePageScreenshot } from '../utils/screenshot-helper';
 import { writeResult } from '../utils/report-results';
@@ -19,6 +19,7 @@ for (const site of loadSites()) {
         let screenshotPath = '';
         let failureScreenshotPath = '';
         let wpErrors: string[] = [];
+        let brokenShortcodes: string[] = [];
 
         try {
           const navigation = await navigateToSitePage(page, url);
@@ -48,6 +49,7 @@ for (const site of loadSites()) {
           title = (await page.title()).trim();
           bodyText = (await page.locator('body').innerText({ timeout: 10_000 })).trim();
           wpErrors = findWordPressErrors(bodyText);
+          brokenShortcodes = findBrokenShortcodes(bodyText, site.ignoreShortcodes);
 
           if (!title) {
             issues.push('Page title is empty.');
@@ -59,6 +61,10 @@ for (const site of loadSites()) {
 
           if (wpErrors.length > 0) {
             issues.push(`WordPress/PHP error text found: ${wpErrors.join(', ')}`);
+          }
+
+          if (brokenShortcodes.length > 0) {
+            issues.push(`Visible broken shortcode(s) found: ${brokenShortcodes.join(', ')}`);
           }
 
           if (looksLikeGeneric404(title, bodyText, status)) {
@@ -94,6 +100,7 @@ for (const site of loadSites()) {
             consoleErrors: monitor.consoleErrors,
             failedNetworkRequests: monitor.failedRequests,
             wordpressErrors: wpErrors,
+            brokenShortcodes,
             brokenImages: [],
             formDetection: null,
             screenshotPaths: [screenshotPath, failureScreenshotPath].filter(Boolean),
