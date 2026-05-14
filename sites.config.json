@@ -47,6 +47,16 @@
       "klaviyo.com",
       "facebook.net"
     ],
+    "ignoreShortcodes": [],
+    "mobileNav": {
+      "enabled": true,
+      "menuSelectors": [],
+      "linkSelector": "nav a, [role=\"navigation\"] a, .menu a, .navbar a, .mobile-menu a"
+    },
+    "internalLinkSample": {
+      "maxLinks": 20,
+      "ignorePatterns": []
+    },
     "expectedText": []
   }
 ]

@@ -57,7 +57,7 @@ function renderHtml(results: MaintenanceResult[], generatedAt: string): string {
     th { background: #eef1f5; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
     tr.failed { background: #fff5f5; }
     tr.passed { background: #f7fff8; }
-    code { background: #eef1f5; border-radius: 4px; padding: 2px 4px; }
+    code { background: #eef1f5; border-radius: 4px; padding: 2px 4px; white-space: pre-wrap; }
     ul { margin: 0; padding-left: 18px; }
     .status { border-radius: 999px; display: inline-block; font-weight: 700; padding: 3px 8px; }
     .status.passed { background: #dff7e5; color: #176c2e; }
@@ -88,9 +88,11 @@ function renderHtml(results: MaintenanceResult[], generatedAt: string): string {
           <th>Network</th>
           <th>Console</th>
           <th>WP Errors</th>
+          <th>Broken Shortcodes</th>
           <th>Broken Images</th>
           <th>Forms</th>
           <th>Mobile Nav</th>
+          <th>Internal Links</th>
           <th>Screenshots</th>
         </tr>
       </thead>
@@ -113,9 +115,11 @@ function renderResultRow(result: MaintenanceResult): string {
   <td>${renderList(result.failedNetworkRequests.map((request) => `${request.resourceType} ${request.status ?? request.failureText ?? ''} ${request.url}`))}</td>
   <td>${renderList(result.consoleErrors.map((error) => error.text))}</td>
   <td>${renderList(result.wordpressErrors)}</td>
+  <td>${renderList(result.brokenShortcodes ?? [])}</td>
   <td>${renderList(result.brokenImages.map(formatBrokenImage))}</td>
   <td>${renderObject(result.formDetection)}</td>
   <td>${renderObject(result.mobileNavResult)}</td>
+  <td>${renderList((result.internalLinkResults ?? []).map(formatInternalLinkResult))}</td>
   <td>${renderList(result.screenshotPaths)}</td>
 </tr>`;
 }
@@ -134,6 +138,15 @@ function formatBrokenImage(image: unknown): string {
   ].filter(Boolean);
 
   return `${String(value.src ?? '')}${details.length ? ` (${details.join(', ')})` : ''}`;
+}
+
+function formatInternalLinkResult(result: unknown): string {
+  if (!result || typeof result !== 'object') {
+    return String(result);
+  }
+
+  const value = result as Record<string, unknown>;
+  return `${String(value.status ?? 'no response')} ${String(value.url ?? '')}`;
 }
 
 function renderList(items: string[]): string {

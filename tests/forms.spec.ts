@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { loadSites, pageUrl } from '../utils/load-sites';
 import { detectForms, detectGenericForm, hasRawFormShortcode } from '../utils/form-detectors';
+import { findBrokenShortcodes } from '../utils/wp-error-checks';
 import { createNetworkMonitor } from '../utils/network-monitor';
 import { capturePageScreenshot } from '../utils/screenshot-helper';
 import { writeResult } from '../utils/report-results';
@@ -16,6 +17,7 @@ for (const site of loadSites()) {
         let screenshotPath = '';
         let failureScreenshotPath = '';
         let detection = null;
+        let brokenShortcodes: string[] = [];
 
         try {
           const navigation = await navigateToSitePage(page, url);
@@ -43,8 +45,11 @@ for (const site of loadSites()) {
             formPage.submitSelector
           );
 
-          if (await hasRawFormShortcode(page)) {
-            issues.push('Visible raw form shortcode found.');
+          const bodyText = await page.locator('body').innerText({ timeout: 10_000 });
+          brokenShortcodes = findBrokenShortcodes(bodyText, site.ignoreShortcodes);
+
+          if (await hasRawFormShortcode(page) || brokenShortcodes.length > 0) {
+            issues.push(`Visible raw form shortcode found${brokenShortcodes.length ? `: ${brokenShortcodes.join(', ')}` : '.'}`);
           }
 
           if (formPage.expectedFormType === 'gravity-forms') {
@@ -120,6 +125,7 @@ for (const site of loadSites()) {
             consoleErrors: monitor.consoleErrors,
             failedNetworkRequests: monitor.failedRequests,
             wordpressErrors: [],
+            brokenShortcodes,
             brokenImages: [],
             formDetection: detection,
             screenshotPaths: [screenshotPath, failureScreenshotPath].filter(Boolean),

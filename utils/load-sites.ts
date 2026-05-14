@@ -21,8 +21,13 @@ export type SiteConfig = {
   formPages?: FormPageConfig[];
   mobileNav?: MobileNavConfig;
   ignoreNetworkPatterns?: string[];
+  ignoreShortcodes?: string[];
   expectedText?: string[];
   expectedTextByPath?: Record<string, string[]>;
+  internalLinkSample?: {
+    maxLinks?: number;
+    ignorePatterns?: string[];
+  };
 };
 
 export type MobileNavConfig = {
@@ -74,8 +79,13 @@ function normalizeSite(site: SiteConfig): SiteConfig {
     formPages: site.formPages ?? [],
     mobileNav: normalizeMobileNav(site.mobileNav),
     ignoreNetworkPatterns: site.ignoreNetworkPatterns ?? [],
+    ignoreShortcodes: site.ignoreShortcodes ?? [],
     expectedText: site.expectedText ?? [],
-    expectedTextByPath: site.expectedTextByPath ?? {}
+    expectedTextByPath: site.expectedTextByPath ?? {},
+    internalLinkSample: {
+      maxLinks: site.internalLinkSample?.maxLinks ?? 20,
+      ignorePatterns: site.internalLinkSample?.ignorePatterns ?? []
+    }
   };
 }
 

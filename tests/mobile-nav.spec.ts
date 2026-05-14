@@ -43,7 +43,7 @@ for (const site of loadSites()) {
       return;
     }
 
-    const mobileNav = site.mobileNav;
+    const mobileNav: MobileNavConfig = site.mobileNav;
     const testPaths = mobileNav.testPaths ?? ['/'];
 
     for (const path of testPaths) {
@@ -121,6 +121,7 @@ for (const site of loadSites()) {
             consoleErrors: monitor.consoleErrors,
             failedNetworkRequests: monitor.failedRequests,
             wordpressErrors: [],
+            brokenShortcodes: [],
             brokenImages: [],
             formDetection: null,
             mobileNavResult,
