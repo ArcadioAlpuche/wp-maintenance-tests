@@ -6,6 +6,30 @@
       "/",
       "/contact/"
     ],
+        "mobileNav": {
+      "enabled": true,
+      "testPaths": [
+        "/"
+      ],
+      "toggleSelectors": [
+        "button[aria-label*='menu' i]",
+        "button[aria-label*='navigation' i]",
+        ".menu-toggle",
+        ".navbar-toggle",
+        ".hamburger",
+        ".mobile-menu-toggle",
+        ".ast-menu-toggle",
+        ".elementor-menu-toggle"
+      ],
+      "navLinkSelectors": [
+        "nav a",
+        ".main-navigation a",
+        ".menu a",
+        ".mobile-menu a",
+        ".elementor-nav-menu a"
+      ],
+      "minVisibleLinks": 1
+    },
     "formPages": [
       {
         "path": "/",

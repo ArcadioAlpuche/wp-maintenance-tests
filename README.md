@@ -1,249 +1,96 @@
-# WordPress Maintenance Smoke Tests
+# WordPress Maintenance Tests
 
-A lightweight Playwright + TypeScript smoke-testing framework for WordPress maintenance workflows.
+Playwright + TypeScript smoke tests for catching obvious WordPress breakage after plugin, theme, or composer updates.
 
-This project was built to help catch common site breakage after:
+The suite is intentionally practical rather than exhaustive. It is meant to help a developer doing maintenance quickly answer: did the updated site still render, did important assets load, did configured forms appear, and did the mobile menu still work?
 
-* WordPress plugin updates
-* Composer updates
-* Theme updates
-* Maintenance changes
-* Frontend regressions
-
-The primary goal is fast, reliable regression testing for agencies managing multiple WordPress sites.
-
----
-
-# Features
-
-## Smoke Testing
-
-* Homepage and key page validation
-* HTTP status checks
-* WordPress fatal error detection
-* 404 detection
-* Console error logging
-* Failed network request detection
-* Screenshot capture
-
-## WordPress-Specific Checks
-
-Detects common WordPress maintenance failures, including:
-
-* Raw Gravity Forms shortcodes
-* Raw Ninja Forms shortcodes
-* PHP fatal errors
-* Database connection errors
-* Maintenance mode screens
-* Broken frontend rendering
-
-## Form Detection
-
-Supports:
-
-* Gravity Forms
-* Ninja Forms
-* Klaviyo detection
-
-Checks:
-
-* Form containers exist
-* Inputs render
-* Submit buttons exist
-* Broken shortcodes are not visible
-
-## Asset Validation
-
-* Broken images
-* Failed CSS requests
-* Failed JS requests
-* Missing frontend assets
-
-## Mobile Smoke Tests
-
-* Mobile viewport testing
-* Mobile navigation checks
-* Hamburger/menu toggle validation
-
-## Screenshot Reporting
-
-* Failure screenshots
-* Baseline screenshots
-* Before/after comparison support
-
----
-
-# Tech Stack
-
-* Node.js
-* TypeScript
-* Playwright
-
----
-
-# Installation
-
-Clone the repository:
+## Commands
 
 ```bash
-git clone <your-repo-url>
-cd wp-maintenance-tests
+npm run test
+npm run test:smoke
+npm run test:assets
+npm run test:forms
+npm run test:mobile-nav
+npm run test:links
+npm run test:site -- --site "Example Site"
+npm run screenshots:baseline
+npm run screenshots:check
 ```
 
-Install dependencies:
+## Site Config
 
-```bash
-npm install
-```
-
-Install Playwright browsers:
-
-```bash
-npx playwright install
-```
-
----
-
-# Configuration
-
-Sites are configured in:
-
-```text
-sites.config.json
-```
-
-Example:
+Sites are configured in `sites.config.json`. Site-specific rules should live there instead of being hardcoded in tests.
 
 ```json
 [
   {
     "siteName": "Example Site",
+    "baseUrl": "https://example.test",
     "pages": [
       "/",
-      "/contact/",
-      "/services/"
+      "/about/",
+      "/contact/"
     ],
-    "formPages": [
-      {
-        "path": "/contact/",
-        "expectedFormType": "gravity-forms",
-        "submitTest": false
-      }
-    ],
+    "formPages": [],
+    "mobileNav": {
+      "enabled": true,
+      "testPaths": ["/"],
+      "toggleSelectors": [
+        "button[aria-label*='menu' i]",
+        "button[aria-label*='navigation' i]",
+        ".menu-toggle",
+        ".navbar-toggle",
+        ".hamburger",
+        ".mobile-menu-toggle",
+        ".ast-menu-toggle",
+        ".elementor-menu-toggle"
+      ],
+      "navLinkSelectors": [
+        "nav a",
+        ".main-navigation a",
+        ".menu a",
+        ".mobile-menu a",
+        ".elementor-nav-menu a"
+      ],
+      "minVisibleLinks": 1
+    },
     "ignoreNetworkPatterns": [
       "googletagmanager.com",
       "google-analytics.com",
-      "klaviyo.com"
-    ]
+      "klaviyo.com",
+      "facebook.net"
+    ],
+    "ignoreShortcodes": [],
+    "expectedText": []
   }
 ]
 ```
 
----
+## Mobile Navigation Test
 
-# Running Tests
+The mobile navigation smoke test checks that a configured site renders a usable mobile menu after maintenance updates.
 
-Set your Codespace or local environment URL:
+It verifies:
 
-```bash
-export BASE_URL=https://your-codespace-url.github.dev
-```
+- The configured page loads with an HTTP status below 400.
+- A visible mobile menu toggle can be found.
+- The toggle can be clicked.
+- Usable navigation links become visible after the click.
+- A failure screenshot is captured when the check fails.
 
-Run all tests:
-
-```bash
-npm run test
-```
-
-Run smoke tests only:
+Run it with:
 
 ```bash
-npm run test:smoke
+npm run test:mobile-nav
 ```
 
-Run form tests:
+If `mobileNav` is missing or `enabled` is `false`, mobile navigation tests are skipped for that site.
 
-```bash
-npm run test:forms
-```
+## Known Limitations
 
-Run asset tests:
-
-```bash
-npm run test:assets
-```
-
-Run tests for a single site:
-
-```bash
-npm run test:site -- --site "Example Site"
-```
-
----
-
-# Suggested Workflow
-
-## Before Updates
-
-Run baseline screenshots/tests:
-
-```bash
-npm run baseline
-```
-
-## Perform Maintenance
-
-* Update plugins
-* Run composer update
-* Apply changes
-
-## After Updates
-
-Run smoke tests:
-
-```bash
-npm run check
-```
-
-Review:
-
-* Failed pages
-* Console errors
-* Network failures
-* Screenshot diffs
-
-If everything looks good:
-
-* Commit changes
-* Push changes
-* Deploy
-
----
-
-# Example Problems This Suite Can Catch
-
-* Plugin update causes white screen
-* Gravity Forms no longer renders
-* Missing CSS after composer update
-* Broken mobile navigation
-* Theme rendering issues
-* Missing JavaScript bundles
-* Broken images
-* Raw shortcodes displaying on frontend
-* Maintenance mode accidentally left enabled
-
----
-
-# Project Goals
-
-This project intentionally prioritizes:
-
-* Reliability
-* Fast feedback
-* Low false positives
-* Maintainability
-* Config-driven testing
-
-This is not intended to be a full end-to-end testing framework.
-
-The focus is practical maintenance QA for real-world WordPress agency workflows.
+- The tests are smoke tests, not full end-to-end tests.
+- Mobile nav checks are not pixel-perfect responsive layout tests.
+- Form checks do not prove emails, CRM integrations, or storage plugins work unless a site-specific submit flow is added.
+- Some third-party scripts, chat widgets, weather widgets, analytics tools, and bot blockers may fail in Codespaces/headless browsers. Add stable ignore patterns for expected noise.
+- Screenshot comparison is side-by-side only; it does not currently do strict pixel diffing.

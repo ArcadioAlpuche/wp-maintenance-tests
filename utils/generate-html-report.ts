@@ -57,7 +57,7 @@ function renderHtml(results: MaintenanceResult[], generatedAt: string): string {
     th { background: #eef1f5; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
     tr.failed { background: #fff5f5; }
     tr.passed { background: #f7fff8; }
-    code { background: #eef1f5; border-radius: 4px; padding: 2px 4px; }
+    code { background: #eef1f5; border-radius: 4px; padding: 2px 4px; white-space: pre-wrap; }
     ul { margin: 0; padding-left: 18px; }
     .status { border-radius: 999px; display: inline-block; font-weight: 700; padding: 3px 8px; }
     .status.passed { background: #dff7e5; color: #176c2e; }
