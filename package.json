@@ -8,6 +8,10 @@
     "test:smoke": "playwright test tests/smoke.spec.ts",
     "test:forms": "playwright test tests/forms.spec.ts",
     "test:assets": "playwright test tests/assets.spec.ts",
+    "test:nav": "playwright test tests/mobile-nav.spec.ts",
+    "test:links": "playwright test tests/internal-links.spec.ts",
+    "screenshots:baseline": "node utils/screenshot-comparison.js baseline",
+    "screenshots:check": "node utils/screenshot-comparison.js check",
     "test:site": "node utils/run-playwright.js"
   },
   "devDependencies": {

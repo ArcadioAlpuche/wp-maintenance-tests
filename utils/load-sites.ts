@@ -20,8 +20,22 @@ export type SiteConfig = {
   pages: string[];
   formPages?: FormPageConfig[];
   ignoreNetworkPatterns?: string[];
+  ignoreShortcodes?: string[];
   expectedText?: string[];
   expectedTextByPath?: Record<string, string[]>;
+  mobileNav?: {
+    enabled?: boolean;
+    menuSelectors?: string[];
+    linkSelector?: string;
+    viewport?: {
+      width: number;
+      height: number;
+    };
+  };
+  internalLinkSample?: {
+    maxLinks?: number;
+    ignorePatterns?: string[];
+  };
 };
 
 export function loadSites(): SiteConfig[] {
@@ -60,8 +74,19 @@ function normalizeSite(site: SiteConfig): SiteConfig {
     pages: site.pages.map((page) => page || '/'),
     formPages: site.formPages ?? [],
     ignoreNetworkPatterns: site.ignoreNetworkPatterns ?? [],
+    ignoreShortcodes: site.ignoreShortcodes ?? [],
     expectedText: site.expectedText ?? [],
-    expectedTextByPath: site.expectedTextByPath ?? {}
+    expectedTextByPath: site.expectedTextByPath ?? {},
+    mobileNav: {
+      enabled: site.mobileNav?.enabled ?? true,
+      menuSelectors: site.mobileNav?.menuSelectors ?? [],
+      linkSelector: site.mobileNav?.linkSelector,
+      viewport: site.mobileNav?.viewport
+    },
+    internalLinkSample: {
+      maxLinks: site.internalLinkSample?.maxLinks ?? 20,
+      ignorePatterns: site.internalLinkSample?.ignorePatterns ?? []
+    }
   };
 }
 
