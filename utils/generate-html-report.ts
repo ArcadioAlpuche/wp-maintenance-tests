@@ -90,6 +90,7 @@ function renderHtml(results: MaintenanceResult[], generatedAt: string): string {
           <th>WP Errors</th>
           <th>Broken Images</th>
           <th>Forms</th>
+          <th>Mobile Nav</th>
           <th>Screenshots</th>
         </tr>
       </thead>
@@ -114,6 +115,7 @@ function renderResultRow(result: MaintenanceResult): string {
   <td>${renderList(result.wordpressErrors)}</td>
   <td>${renderList(result.brokenImages.map(formatBrokenImage))}</td>
   <td>${renderObject(result.formDetection)}</td>
+  <td>${renderObject(result.mobileNavResult)}</td>
   <td>${renderList(result.screenshotPaths)}</td>
 </tr>`;
 }

@@ -1,14 +1,35 @@
 [
   {
     "siteName": "Example Site",
-    "baseUrl": "https://automatic-halibut-rp77xp4px9pf44-80.app.github.dev/",
+    "baseUrl": "https://ideal-guacamole-pp776pjp9r9h7xr6-80.app.github.dev/",
     "pages": [
       "/",
-      "/category/getting-started/",
-      "/category/quiz/",
-      "/category/videos/",
-      "/about-us/"
+      "/contact/"
     ],
+        "mobileNav": {
+      "enabled": true,
+      "testPaths": [
+        "/"
+      ],
+      "toggleSelectors": [
+        "button[aria-label*='menu' i]",
+        "button[aria-label*='navigation' i]",
+        ".menu-toggle",
+        ".navbar-toggle",
+        ".hamburger",
+        ".mobile-menu-toggle",
+        ".ast-menu-toggle",
+        ".elementor-menu-toggle"
+      ],
+      "navLinkSelectors": [
+        "nav a",
+        ".main-navigation a",
+        ".menu a",
+        ".mobile-menu a",
+        ".elementor-nav-menu a"
+      ],
+      "minVisibleLinks": 1
+    },
     "formPages": [
       {
         "path": "/",

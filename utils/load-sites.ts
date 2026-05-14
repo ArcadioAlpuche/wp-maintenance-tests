@@ -19,9 +19,22 @@ export type SiteConfig = {
   baseUrl: string;
   pages: string[];
   formPages?: FormPageConfig[];
+  mobileNav?: MobileNavConfig;
   ignoreNetworkPatterns?: string[];
   expectedText?: string[];
   expectedTextByPath?: Record<string, string[]>;
+};
+
+export type MobileNavConfig = {
+  enabled?: boolean;
+  testPaths?: string[];
+  toggleSelectors?: string[];
+  navLinkSelectors?: string[];
+  minVisibleLinks?: number;
+  viewport?: {
+    width: number;
+    height: number;
+  };
 };
 
 export function loadSites(): SiteConfig[] {
@@ -59,9 +72,25 @@ function normalizeSite(site: SiteConfig): SiteConfig {
     baseUrl: site.baseUrl.endsWith('/') ? site.baseUrl : `${site.baseUrl}/`,
     pages: site.pages.map((page) => page || '/'),
     formPages: site.formPages ?? [],
+    mobileNav: normalizeMobileNav(site.mobileNav),
     ignoreNetworkPatterns: site.ignoreNetworkPatterns ?? [],
     expectedText: site.expectedText ?? [],
     expectedTextByPath: site.expectedTextByPath ?? {}
+  };
+}
+
+function normalizeMobileNav(mobileNav?: MobileNavConfig): MobileNavConfig | undefined {
+  if (!mobileNav) {
+    return undefined;
+  }
+
+  return {
+    enabled: mobileNav.enabled ?? true,
+    testPaths: mobileNav.testPaths ?? ['/'],
+    toggleSelectors: mobileNav.toggleSelectors ?? [],
+    navLinkSelectors: mobileNav.navLinkSelectors ?? [],
+    minVisibleLinks: mobileNav.minVisibleLinks ?? 1,
+    viewport: mobileNav.viewport ?? { width: 390, height: 844 }
   };
 }
 

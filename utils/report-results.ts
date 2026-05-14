@@ -5,7 +5,7 @@ import type { FailedNetworkRequest, ConsoleError } from './network-monitor';
 import type { FormDetectionResult } from './form-detectors';
 
 export type MaintenanceResult = {
-  testType: 'smoke' | 'forms' | 'assets';
+  testType: 'smoke' | 'forms' | 'assets' | 'mobile-nav';
   siteName: string;
   pageUrl: string;
   status: 'passed' | 'failed';
@@ -15,6 +15,7 @@ export type MaintenanceResult = {
   wordpressErrors: string[];
   brokenImages: unknown[];
   formDetection: FormDetectionResult | null;
+  mobileNavResult?: unknown;
   screenshotPaths: string[];
   notes: string[];
 };
